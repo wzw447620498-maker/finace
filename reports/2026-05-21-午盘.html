@@ -79,6 +79,26 @@
     color: var(--accent);
     border: 1px solid rgba(88,166,255,0.3);
   }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .back-btn:hover {
+    color: var(--text);
+    border-color: #444c56;
+    background: #21262d;
+  }
 
   /* Nav tabs */
   .nav-tabs {
@@ -395,9 +415,12 @@
 
 <div class="header">
   <div class="header-top">
-    <div>
-      <div class="header-title">基金板块日报 · <span>2026-05-21</span></div>
-      <div class="header-meta">生成时间：12:45　　数据截止：2026-05-21 收盘　　来源：同花顺截图</div>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <a class="back-btn" href="../index.html">← 归档</a>
+      <div>
+        <div class="header-title">基金板块日报 · <span>2026-05-21</span></div>
+        <div class="header-meta">生成时间：12:45　　数据截止：2026-05-21 收盘　　来源：同花顺截图</div>
+      </div>
     </div>
     <span class="tag">午盘报告</span>
   </div>
