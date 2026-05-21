@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>基金板块日报 · 2026-05-21 · 午盘</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--up:#f85149;--down:#3fb950;--up-bg:rgba(248,81,73,0.1);--down-bg:rgba(63,185,80,0.1);--accent:#58a6ff;--accent2:#d2a8ff;--yellow:#d29922;--radius:10px;--font-mono:'SF Mono','Fira Code',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,'PingFang SC','Hiragino Sans GB',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+  .header{background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);border-bottom:1px solid var(--border);padding:16px 20px 14px;position:sticky;top:0;z-index:100;}
+  .header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .header-title{font-size:17px;font-weight:700;color:var(--text);}
+  .header-title span{color:var(--accent);}
+  .header-meta{font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-top:3px;}
+  .tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(88,166,255,0.15);color:var(--accent);border:1px solid rgba(88,166,255,0.3);}
+  .back-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:var(--bg3);border:1px solid var(--border);text-decoration:none;transition:all 0.15s;}
+  .back-btn:hover{color:var(--text);border-color:#444c56;}
+  .nav-tabs{display:flex;padding:0 20px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .nav-tabs::-webkit-scrollbar{display:none;}
+  .nav-tab{padding:10px 14px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;user-select:none;}
+  .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .section{display:none;padding:16px 20px 32px;max-width:900px;margin:0 auto;}
+  .section.active{display:block;}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+  .index-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+  @media(min-width:600px){.index-grid{grid-template-columns:repeat(4,1fr);}}
+  .index-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;}
+  .index-name{font-size:11px;color:var(--text2);margin-bottom:4px;}
+  .index-val{font-size:19px;font-weight:700;font-family:var(--font-mono);}
+  .index-chg{font-size:12px;font-family:var(--font-mono);margin-top:2px;}
+  .up{color:var(--up);}.down{color:var(--down);}.flat{color:var(--text2);}
+  .stats-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .stat-item{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;flex:1;min-width:110px;}
+  .stat-label{font-size:11px;color:var(--text3);}
+  .stat-val{font-size:13px;font-weight:600;margin-top:2px;}
+  .sec-title{font-size:15px;font-weight:700;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .sec-title::before{content:'';display:block;width:3px;height:16px;border-radius:2px;background:var(--accent);}
+  .chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;}
+  .chart-header{padding:12px 16px 0;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.6px;}
+  .chart-box{width:100%;height:280px;}
+  .chart-box-lg{width:100%;height:400px;}
+  .attr-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;}
+  .attr-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--border);}
+  .attr-name{font-weight:700;font-size:15px;}
+  .attr-badges{display:flex;gap:6px;flex-wrap:wrap;}
+  .badge{padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--font-mono);font-weight:600;}
+  .badge-up{background:var(--up-bg);color:var(--up);}
+  .badge-down{background:var(--down-bg);color:var(--down);}
+  .badge-flow{background:rgba(88,166,255,0.1);color:var(--accent);}
+  .badge-neutral{background:rgba(139,148,158,0.15);color:var(--text2);}
+  .attr-body{padding:12px 16px;}
+  .reason-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.6;}
+  .reason-item:last-child{border-bottom:none;}
+  .reason-num{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(88,166,255,0.15);color:var(--accent);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .reason-label{font-weight:600;color:var(--text);margin-bottom:2px;}
+  .reason-desc{color:var(--text2);font-size:12px;}
+  .data-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .data-table th{text-align:left;padding:8px 10px;color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .data-table td{padding:8px 10px;border-bottom:1px solid rgba(48,54,61,0.5);vertical-align:middle;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:hover td{background:rgba(48,54,61,0.3);}
+  .rank-badge{display:inline-block;width:22px;height:22px;border-radius:4px;background:var(--bg3);color:var(--text2);font-size:11px;font-weight:700;text-align:center;line-height:22px;}
+  .rank-badge.top3{background:rgba(210,153,34,0.2);color:var(--yellow);}
+  .summary-list{list-style:none;}
+  .summary-list li{padding:10px 0;border-bottom:1px solid rgba(48,54,61,0.5);font-size:13px;display:flex;gap:10px;line-height:1.6;}
+  .summary-list li:last-child{border-bottom:none;}
+  .sum-key{flex-shrink:0;font-weight:700;color:var(--accent2);font-size:12px;min-width:80px;}
+  .infer{display:inline-block;padding:1px 5px;background:rgba(210,153,34,0.15);color:var(--yellow);border-radius:3px;font-size:10px;font-weight:600;vertical-align:middle;margin-left:4px;}
+  .signal-item{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px;line-height:1.6;}
+  .signal-item.danger{border-left-color:var(--up);}
+  .signal-item.info{border-left-color:var(--accent);}
+  .flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(max-width:480px){.flow-grid{grid-template-columns:1fr;}}
+  .flow-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;}
+  .flow-card-label{font-size:11px;color:var(--text3);margin-bottom:4px;}
+  .flow-card-val{font-size:14px;font-weight:700;}
+  .flow-card-sub{font-size:11px;color:var(--text2);margin-top:3px;}
+  .footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:20px;}
+  @media(max-width:480px){.header{padding:14px 14px 12px;}.section{padding:12px 14px 28px;}.nav-tab{padding:10px 11px;font-size:12px;}.index-val{font-size:16px;}.chart-box{height:230px;}.chart-box-lg{height:320px;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <a class="back-btn" href="../index.html">← 归档</a>
+      <div>
+        <div class="header-title">基金板块日报 · <span>2026-05-21</span></div>
+        <div class="header-meta">生成时间：18:30　　数据截止：2026-05-21 收盘　　来源：同花顺截图</div>
+      </div>
+    </div>
+    <span class="tag">午盘报告</span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="switchTab(this,'overview')">市场概览</div>
+  <div class="nav-tab" onclick="switchTab(this,'sectors')">板块涨跌</div>
+  <div class="nav-tab" onclick="switchTab(this,'attr')">涨跌归因</div>
+  <div class="nav-tab" onclick="switchTab(this,'flow')">资金流向</div>
+  <div class="nav-tab" onclick="switchTab(this,'summary')">小结&信号</div>
+</div>
+
+<!-- 一、市场概览 -->
+<div id="tab-overview" class="section active">
+  <div class="index-grid">
+    <div class="index-card"><div class="index-name">上证指数</div><div class="index-val down">4077.28</div><div class="index-chg down">▼ −2.04%　−84.90</div></div>
+    <div class="index-card"><div class="index-name">深证成指</div><div class="index-val down">15247.27</div><div class="index-chg down">▼ −2.07%　−322.71</div></div>
+    <div class="index-card"><div class="index-name">北证50</div><div class="index-val down">1323.84</div><div class="index-chg down">▼ −1.89%　−25.54</div></div>
+    <div class="index-card"><div class="index-name">创业板指</div><div class="index-val down">3829.78</div><div class="index-chg down">▼ −2.35%　−92.01</div></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-label">下跌个股</div><div class="stat-val down">超 4700 只</div></div>
+    <div class="stat-item"><div class="stat-label">上证失守</div><div class="stat-val down">4100 点</div></div>
+    <div class="stat-item"><div class="stat-label">北向资金</div><div class="stat-val" style="color:var(--text2)">数据待确认</div></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-header">四大指数收盘涨跌幅（2026-05-21）</div>
+    <div class="chart-box" id="chart-index"></div>
+  </div>
+  <div class="sec-title">收盘走势特征</div>
+  <div class="card">
+    <ul class="summary-list">
+      <li><span class="sum-key">高开低走</span>早盘高开后持续下行，全天呈"冲高回落"走势，午盘前指数已明显破位，下午加速下跌，沪指失守4100点，全市场超4700只个股下跌。</li>
+      <li><span class="sum-key">全面普跌</span>四大指数跌幅均超-1.89%，创业板指跌幅最大（-2.35%），科创50跌超3%，今日为近期最大单日跌幅。半导体-6.05%领跌全场。</li>
+      <li><span class="sum-key">高位兑现</span>本轮科技主线（半导体/通信设备/光伏）在连续大涨后今日集体高位兑现，属典型"高潮日后次日补跌+加速兑现"行为，非系统性利空驱动。<span class="infer">推断</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 二、板块涨跌 -->
+<div id="tab-sectors" class="section">
+  <div class="chart-wrap">
+    <div class="chart-header">领涨板块 Top 5（收盘涨跌幅 %）</div>
+    <div class="chart-box" id="chart-top10"></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-header">领跌板块 Top 10（收盘涨跌幅 %）</div>
+    <div class="chart-box-lg" id="chart-bot10"></div>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-header">主力资金净流向（亿元）</div>
+    <div class="chart-box-lg" id="chart-flow"></div>
+  </div>
+  <div class="sec-title">板块收盘数据（部分）</div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>排名</th><th>板块</th><th>涨跌幅</th><th>成交额(亿)</th><th>净流向(亿)</th><th>涨/跌家数</th><th>领涨股</th></tr></thead>
+        <tbody id="table-sectors"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 三、涨跌归因 -->
+<div id="tab-attr" class="section">
+  <div class="sec-title">领涨 Top 3</div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name up">机场航运</span>
+      <div class="attr-badges">
+        <span class="badge badge-up">+0.92%　排名 1/90</span>
+        <span class="badge badge-flow">净流入 +6.28亿</span>
+        <span class="badge badge-neutral">春秋航空 +4.89%　7涨4跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">暑运旺季预期 + 油价低位 — 航司盈利弹性持续</div>
+        <div class="reason-desc">春秋航空Q1净利同比+27.69%，国际航线ASK恢复率达271%；布伦特原油较2024年同比降约21%，燃油成本改善叠加暑运需求预期，市场持续给予溢价。今日大盘普跌中机场航运逆势领涨，防御属性凸显。</div>
+      </div></div>
+      <div class="reason-item"><div class="reason-num">2</div><div>
+        <div class="reason-label">大盘下跌中资金寻求防御方向</div>
+        <div class="reason-desc">科技赛道高位兑现日，资金向低估值、有业绩支撑的交运方向转移，机场航运连续两日领涨，防御轮动逻辑延续。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name up">电机</span>
+      <div class="attr-badges">
+        <span class="badge badge-up">+0.31%　排名 2/90</span>
+        <span class="badge badge-flow">净流入 +9.22亿</span>
+        <span class="badge badge-neutral">三协电机 +14.18%　13涨13跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">人形机器人产业链景气持续</div>
+        <div class="reason-desc">三协电机涨停+14.18%，人形机器人核心零部件（电机/减速器）需求预期持续，在全场普跌背景下逆势维持正收益，显示资金对机器人产业链仍有独立配置意愿。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name up">银行</span>
+      <div class="attr-badges">
+        <span class="badge badge-up">+0.17%　排名 3/90</span>
+        <span class="badge badge-flow">净流入 +7.23亿</span>
+        <span class="badge badge-neutral">重庆银行 +3.71%　20涨18跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">高股息防御属性显现 — 大跌日资金避险流入</div>
+        <div class="reason-desc">建设银行今日涨超2%创历史新高，银行板块在全场普跌中逆势小涨，高股息/高分红属性在科技赛道大幅回调时获资金避险配置，体现典型的"跷跷板"效应。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="sec-title">领跌 Top 5</div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name down">半导体</span>
+      <div class="attr-badges">
+        <span class="badge badge-down">−6.05%　排名 90/90</span>
+        <span class="badge badge-down">净流出 −163.56亿</span>
+        <span class="badge badge-neutral">华微电子 +10.03%　13涨165跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">连续高位兑现加速 — 过快涨幅压缩安全边际</div>
+        <div class="reason-desc">半导体板块近10日累计涨幅超30%，申万半导体PE超103倍，上海合晶、东芯股份今日跌超15%，属典型高位筹码集中后的加速兑现。净流出163.56亿为全场最大单板块失血。</div>
+      </div></div>
+      <div class="reason-item"><div class="reason-num">2</div><div>
+        <div class="reason-label">美股费城半导体指数联动下跌</div>
+        <div class="reason-desc">上周美股费城半导体指数跌3.8%，闪迪跌超8%，高通跌超7%，美光科技跌约4%，海外科技股调整压力传导至A股半导体板块，形成共振下跌。</div>
+      </div></div>
+      <div class="reason-item"><div class="reason-num">3</div><div>
+        <div class="reason-label">算力硬件尾盘迅速走低 — 情绪面急剧恶化</div>
+        <div class="reason-desc">胜蓝股份等算力硬件股尾盘快速补跌超10%，显示恐慌盘涌现，短线资金快速撤离，板块165家个股下跌，仅13家上涨，内部几乎全面瓦解。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name down">其他电子</span>
+      <div class="attr-badges">
+        <span class="badge badge-down">−5.63%　排名 89/90</span>
+        <span class="badge badge-down">净流出 −31.38亿</span>
+        <span class="badge badge-neutral">京泉华 +1.73%　1涨33跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">半导体主线崩盘联带下跌</div>
+        <div class="reason-desc">其他电子板块含大量半导体周边/电子元器件标的，随半导体主线集体杀跌，1涨33跌，属系统性跟跌而非独立利空。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name down">通信设备</span>
+      <div class="attr-badges">
+        <span class="badge badge-down">−5.59%　排名 88/90</span>
+        <span class="badge badge-down">净流出 −177.46亿</span>
+        <span class="badge badge-neutral">万马科技 +5.65%　5涨85跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">前期超高成交量后主力兑现 — 光模块/CPO龙头补跌</div>
+        <div class="reason-desc">通信设备昨日成交2007亿，今日净流出高达177.46亿，为全场净流出第一，中际旭创、新易盛、天孚通信等CPO老龙头遭主力合计卖出超50亿，完成新老龙头切换后旧龙头加速出货。</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name down">电子化学品</span>
+      <div class="attr-badges">
+        <span class="badge badge-down">−5.29%　排名 86/90</span>
+        <span class="badge badge-down">净流出 −23.52亿</span>
+        <span class="badge badge-neutral">海星股份 +8.40%　2涨38跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">半导体上游材料跟随主线下跌</div>
+        <div class="reason-desc">昨日涨+2.48%的电子化学品今日跌-5.29%，前两日连续涨幅兑现，2涨38跌，与半导体主线完全同步。高位追入的短线资金集中出逃。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="attr-block">
+    <div class="attr-head">
+      <span class="attr-name down">电力</span>
+      <div class="attr-badges">
+        <span class="badge badge-down">−2.23%　排名 29/90</span>
+        <span class="badge badge-down">净流出 −84.06亿</span>
+        <span class="badge badge-neutral">豫能控股 +10.01%　16涨93跌</span>
+      </div>
+    </div>
+    <div class="attr-body">
+      <div class="reason-item"><div class="reason-num">1</div><div>
+        <div class="reason-label">连续三日流出 — "算电协同"叙事降温中</div>
+        <div class="reason-desc">电力板块已连续三日净流出（5/19: -144.83亿、5/20早盘: -121.26亿、今日: -84.06亿），合计流出超350亿，但16涨93跌说明部分筹码已换手到位，核心算电品种（上海电力、华能蒙电）今日逆势飘红，结构性分化。<span class="infer">推断</span></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 四、资金流向 -->
+<div id="tab-flow" class="section">
+  <div class="chart-wrap">
+    <div class="chart-header">主力净流出 Top 板块（亿元）</div>
+    <div class="chart-box-lg" id="chart-flow2"></div>
+  </div>
+  <div class="sec-title">关键数据</div>
+  <div class="flow-grid">
+    <div class="flow-card"><div class="flow-card-label">最大净流出</div><div class="flow-card-val down">通信设备 −177.46亿</div><div class="flow-card-sub">成交2063亿，5涨85跌，CPO老龙头集中出货</div></div>
+    <div class="flow-card"><div class="flow-card-label">半导体净流出</div><div class="flow-card-val down">−163.56亿</div><div class="flow-card-sub">成交5551亿居全场第一，165家个股下跌</div></div>
+    <div class="flow-card"><div class="flow-card-label">流出超40亿板块</div><div class="flow-card-val down" style="font-size:12px;line-height:1.8">
+      通信设备 −177.46亿<br>
+      半导体 −163.56亿<br>
+      IT服务 −113.18亿<br>
+      电网设备 −97.85亿<br>
+      电力 −84.06亿<br>
+      光伏设备 −25.25亿<br>
+      电池 −63.23亿
+    </div><div class="flow-card-sub">七大板块合计流出超720亿</div></div>
+    <div class="flow-card"><div class="flow-card-label">成交额前三</div><div class="flow-card-val" style="font-size:12px;line-height:1.8;color:var(--accent)">
+      半导体 5551.42亿<br>
+      IT服务 861.91亿<br>
+      通用设备 1229.13亿
+    </div><div class="flow-card-sub">半导体成交创近期新高，天量阴线特征显著</div></div>
+  </div>
+  <div class="sec-title">核心信号</div>
+  <div class="signal-item danger"><strong>【天量阴线】半导体：</strong>成交5551亿创近期天量，但涨跌幅-6.05%，净流出163.56亿，典型"主力高位派发"特征，短期大概率进入震荡调整阶段，需观察成交能否快速萎缩来判断调整深度。<span class="infer">推断</span></div>
+  <div class="signal-item danger"><strong>【连续失血】通信设备：</strong>连续两日净流出合计超230亿（昨-55.26亿+今-177.46亿），CPO老龙头主力换仓迹象明确，短期补跌风险仍存。<span class="infer">推断</span></div>
+  <div class="signal-item info"><strong>【防御轮动】机场/银行/电机逆势：</strong>今日大跌中机场航运（+6.28亿）、银行（+7.23亿）、电机（+9.22亿）逆势获资金流入，说明市场资金并未整体撤退，而是在内部做防御性转移。<span class="infer">推断</span></div>
+</div>
+
+<!-- 五、小结&信号 -->
+<div id="tab-summary" class="section">
+  <div class="sec-title">午盘（收盘）小结</div>
+  <div class="card">
+    <ul class="summary-list">
+      <li><span class="sum-key">主线</span>今日无主线，全面普跌日。唯一逆势方向：机场航运/银行/电机，均为低估值防御品种，属避险轮动而非进攻性主线。</li>
+      <li><span class="sum-key">失血点</span>半导体（-163.56亿）+通信设备（-177.46亿）合计失血超340亿，叠加IT服务-113亿、电网设备-97亿，科技硬件链条集体崩塌，一日兑现前三日涨幅。<span class="infer">推断</span></li>
+      <li><span class="sum-key">风格特征</span>从"科技进攻"急速切换至"全面防御"，市场情绪由极度乐观转向悲观，普跌超4700股、沪指失守4100点，短期或需时间消化高位筹码。<span class="infer">推断</span></li>
+      <li><span class="sum-key">明日观察</span>
+        <div style="margin-top:6px;">
+          <div style="margin-bottom:4px;">① 半导体能否缩量企稳，若继续放量下跌则调整深度加大</div>
+          <div style="margin-bottom:4px;">② 银行/机场等防御方向是否持续获资金承接</div>
+          <div style="margin-bottom:4px;">③ 沪指4100点能否修复，否则将打开更大下行空间</div>
+          <div>④ 电力板块核心算电标的（上海电力/华能蒙电）是否再度走强，判断"算电协同"主线存活性</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="sec-title">需要注意的信号</div>
+  <div class="signal-item danger"><strong>【本轮调整归因】</strong>新浪财经收评明确指出：本次下跌主因为"上涨速率过快导致的自然调整"，而非基本面利空。长鑫IPO/DRAM涨价等核心催化逻辑未变，下跌本质是高位筹码换手。<span class="infer">推断</span></div>
+  <div class="signal-item danger"><strong>【连续验证失败】</strong>早报提示"通信设备+2.80亿昨日逆势流入或为轮动方向"，今日净流出-177.46亿完全证伪；需重新审视短期轮动信号的可靠性。</div>
+  <div class="signal-item"><strong>【结构性机会】</strong>电力板块内部分化：算电协同核心品种（上海电力/华能蒙电）今日逆势飘红，而非算电概念的电力股继续下跌，说明主力资金并未离开算电赛道，只是在板块内做了精细切换。<span class="infer">推断</span></div>
+  <div class="sec-title">操作参考素材</div>
+  <div class="card">
+    <ul class="summary-list">
+      <li><span class="sum-key">短期1-3天</span>半导体/通信设备短期规避，观察缩量止跌信号；银行/机场若明日维持强势可关注防御性配置；整体仓位宜轻。<span class="infer">推断</span></li>
+      <li><span class="sum-key">中期1-2周</span>科技主线调整幅度与时间换空间后，若半导体完成筹码换手+长鑫IPO进展有新催化，则下一轮行情启动空间更大；电力算电核心标的若持续逆势，可作为中期布局观察对象。<span class="infer">推断</span></li>
+    </ul>
+  </div>
+  <div class="sec-title">待跟踪事项</div>
+  <div class="card">
+    <ul class="summary-list">
+      <li><span class="sum-key">明日</span>半导体成交量变化；沪指4100点能否修复；电力算电核心品种走向</li>
+      <li><span class="sum-key">本周</span>长鑫/长江存储IPO最新进展；美股费城半导体走势</li>
+      <li><span class="sum-key">5月底</span>国内5月PMI数据（约5/31）</li>
+      <li><span class="sum-key">持续跟踪</span>DRAM现货价格；通信设备CPO新龙头（华工科技等）后续表现</li>
+    </ul>
+  </div>
+  <div class="sec-title">复盘备注</div>
+  <div class="card" style="min-height:80px;color:var(--text3);font-style:italic;">由 Steven 本人填写，此处留空。</div>
+</div>
+
+<div class="footer">本报告由 Claude 基于同花顺截图数据（2026-05-21 收盘）生成 · 仅供个人投资参考，不构成投资建议</div>
+
+<script>
+function switchTab(el,id){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='overview'&&!window._ci)initChartIndex();
+  if(id==='sectors'&&!window._cs)initChartSectors();
+  if(id==='flow'&&!window._cf)initChartFlow2();
+}
+const DARK={bg:'transparent',text:'#8b949e',split:'#21262d',up:'#f85149',down:'#3fb950'};
+function ec(id){return echarts.init(document.getElementById(id),null,{renderer:'canvas'});}
+
+function initChartIndex(){
+  window._ci=true;
+  const c=ec('chart-index');
+  c.setOption({backgroundColor:DARK.bg,tooltip:{trigger:'axis',backgroundColor:'#1c2128',borderColor:'#30363d',textStyle:{color:'#e6edf3'}},grid:{left:16,right:16,top:20,bottom:40,containLabel:true},xAxis:{type:'category',data:['上证指数','深证成指','北证50','创业板指'],axisLine:{lineStyle:{color:DARK.split}},axisLabel:{color:DARK.text}},yAxis:{type:'value',min:-3,max:0.5,axisLabel:{color:DARK.text,formatter:v=>v.toFixed(2)+'%'},splitLine:{lineStyle:{color:DARK.split}}},series:[{type:'bar',data:[
+    {value:-2.04,itemStyle:{color:DARK.down,borderRadius:[0,0,4,4]}},
+    {value:-2.07,itemStyle:{color:DARK.down,borderRadius:[0,0,4,4]}},
+    {value:-1.89,itemStyle:{color:DARK.down,borderRadius:[0,0,4,4]}},
+    {value:-2.35,itemStyle:{color:DARK.down,borderRadius:[0,0,4,4]}},
+  ],label:{show:true,position:'bottom',formatter:p=>p.value.toFixed(2)+'%',color:DARK.text,fontSize:12},barWidth:'40%'}]});
+  window.addEventListener('resize',()=>c.resize());
+}
+
+const topS=[
+  {name:'机场航运',chg:0.92,vol:62.10,flow:6.28,up:7,down:4,rank:1},
+  {name:'电机',chg:0.31,vol:170.95,flow:9.22,up:13,down:13,rank:2},
+  {name:'银行',chg:0.17,vol:241.22,flow:7.23,up:20,down:18,rank:3},
+  {name:'白酒',chg:0.10,vol:134.43,flow:-7.86,up:7,down:12,rank:4},
+];
+const botS=[
+  {name:'半导体',chg:-6.05,vol:5551.42,flow:-163.56,up:13,down:165,rank:90},
+  {name:'其他电子',chg:-5.63,vol:377.38,flow:-31.38,up:1,down:33,rank:89},
+  {name:'通信设备',chg:-5.59,vol:2063.92,flow:-177.46,up:5,down:85,rank:88},
+  {name:'电子化学品',chg:-5.29,vol:693.98,flow:-23.52,up:2,down:38,rank:86},
+  {name:'油气开采及服务',chg:-5.27,vol:92.94,flow:-9.93,up:0,down:19,rank:85},
+  {name:'其他电源设备',chg:-5.50,vol:293.63,flow:-33.25,up:0,down:33,rank:87},
+  {name:'IT服务',chg:-4.22,vol:861.91,flow:-113.18,up:8,down:121,rank:80},
+  {name:'通信服务',chg:-4.37,vol:433.35,flow:-63.80,up:3,down:42,rank:81},
+  {name:'电网设备',chg:-4.38,vol:762.71,flow:-97.85,up:9,down:130,rank:82},
+  {name:'光伏设备',chg:-4.42,vol:764.71,flow:-25.25,up:4,down:69,rank:84},
+];
+
+const tbody=document.getElementById('table-sectors');
+[...topS,...botS].sort((a,b)=>a.rank-b.rank).forEach(s=>{
+  const tr=document.createElement('tr');
+  const rc=s.rank<=3?'rank-badge top3':'rank-badge';
+  const cc=s.chg>0?'var(--up)':s.chg<0?'var(--down)':'var(--text2)';
+  const fc=s.flow>0?'var(--up)':s.flow<0?'var(--down)':'var(--text2)';
+  tr.innerHTML=`<td><span class="${rc}">${s.rank}</span></td><td style="font-weight:600">${s.name}</td><td style="color:${cc};font-family:var(--font-mono)">${s.chg>0?'+':''}${s.chg.toFixed(2)}%</td><td style="font-family:var(--font-mono)">${s.vol.toFixed(1)}</td><td style="color:${fc};font-family:var(--font-mono)">${s.flow>0?'+':''}${s.flow.toFixed(2)}</td><td style="color:var(--text2);font-size:12px"><span style="color:var(--up)">${s.up}</span>/<span style="color:var(--down)">${s.down}</span></td><td style="color:var(--text2);font-size:11px">-</td>`;
+  tbody.appendChild(tr);
+});
+
+function initChartSectors(){
+  window._cs=true;
+  // 领涨
+  const c1=ec('chart-top10');
+  const n1=topS.map(s=>s.name).reverse();const v1=topS.map(s=>s.chg).reverse();
+  c1.setOption({backgroundColor:DARK.bg,tooltip:{trigger:'axis',backgroundColor:'#1c2128',borderColor:'#30363d',textStyle:{color:'#e6edf3'}},grid:{left:16,right:70,top:10,bottom:10,containLabel:true},xAxis:{type:'value',axisLabel:{color:DARK.text,formatter:v=>v+'%'},splitLine:{lineStyle:{color:DARK.split}}},yAxis:{type:'category',data:n1,axisLabel:{color:DARK.text,fontSize:12},axisTick:{show:false}},series:[{type:'bar',data:v1,barWidth:18,itemStyle:{color:p=>`rgba(248,81,73,${0.5+p.dataIndex*0.1})`,borderRadius:[0,4,4,0]},label:{show:true,position:'right',formatter:p=>'+'+p.value.toFixed(2)+'%',color:DARK.up,fontSize:11}}]});
+  window.addEventListener('resize',()=>c1.resize());
+  // 领跌
+  const c2=ec('chart-bot10');
+  const sb=[...botS].sort((a,b)=>a.chg-b.chg);
+  const n2=sb.map(s=>s.name).reverse();const v2=sb.map(s=>s.chg).reverse();
+  c2.setOption({backgroundColor:DARK.bg,tooltip:{trigger:'axis',backgroundColor:'#1c2128',borderColor:'#30363d',textStyle:{color:'#e6edf3'}},grid:{left:16,right:80,top:10,bottom:10,containLabel:true},xAxis:{type:'value',axisLabel:{color:DARK.text,formatter:v=>v+'%'},splitLine:{lineStyle:{color:DARK.split}}},yAxis:{type:'category',data:n2,axisLabel:{color:DARK.text,fontSize:12},axisTick:{show:false}},series:[{type:'bar',data:v2,barWidth:14,itemStyle:{color:p=>`rgba(63,185,80,${0.45+(9-p.dataIndex)*0.05})`,borderRadius:[0,4,4,0]},label:{show:true,position:'left',formatter:p=>p.value.toFixed(2)+'%',color:DARK.down,fontSize:11}}]});
+  window.addEventListener('resize',()=>c2.resize());
+  // 资金
+  const allF=[...topS,...botS].sort((a,b)=>b.flow-a.flow);
+  const c3=ec('chart-flow');
+  const fn=allF.map(s=>s.name).reverse();const fv=allF.map(s=>s.flow).reverse();
+  c3.setOption({backgroundColor:DARK.bg,tooltip:{trigger:'axis',backgroundColor:'#1c2128',borderColor:'#30363d',textStyle:{color:'#e6edf3'}},grid:{left:16,right:90,top:10,bottom:10,containLabel:true},xAxis:{type:'value',axisLabel:{color:DARK.text,formatter:v=>v+'亿'},splitLine:{lineStyle:{color:DARK.split}}},yAxis:{type:'category',data:fn,axisLabel:{color:DARK.text,fontSize:12},axisTick:{show:false}},series:[{type:'bar',data:fv,barWidth:14,itemStyle:{color:p=>fv[p.dataIndex]>=0?DARK.up:DARK.down,borderRadius:[0,4,4,0]},label:{show:true,position:p=>fv[p.dataIndex]>=0?'right':'left',formatter:p=>(p.value>0?'+':'')+p.value.toFixed(1)+'亿',color:p=>fv[p.dataIndex]>=0?DARK.up:DARK.down,fontSize:11}}]});
+  window.addEventListener('resize',()=>c3.resize());
+}
+
+function initChartFlow2(){
+  window._cf=true;
+  const data=[
+    {name:'机场航运',flow:6.28},{name:'银行',flow:7.23},{name:'电机',flow:9.22},
+    {name:'通信设备',flow:-177.46},{name:'半导体',flow:-163.56},{name:'IT服务',flow:-113.18},
+    {name:'电网设备',flow:-97.85},{name:'电力',flow:-84.06},{name:'通信服务',flow:-63.80},
+    {name:'电池',flow:-63.23},{name:'其他电源设备',flow:-33.25},{name:'其他电子',flow:-31.38}
+  ].sort((a,b)=>b.flow-a.flow);
+  const names=data.map(d=>d.name).reverse();const vals=data.map(d=>d.flow).reverse();
+  const c=ec('chart-flow2');
+  c.setOption({backgroundColor:DARK.bg,tooltip:{trigger:'axis',backgroundColor:'#1c2128',borderColor:'#30363d',textStyle:{color:'#e6edf3'},formatter:p=>`${p[0].name}<br/>净流向: <b>${p[0].value>0?'+':''}${p[0].value.toFixed(2)}亿</b>`},grid:{left:16,right:100,top:10,bottom:10,containLabel:true},xAxis:{type:'value',axisLabel:{color:DARK.text,formatter:v=>v+'亿'},splitLine:{lineStyle:{color:DARK.split}}},yAxis:{type:'category',data:names,axisLabel:{color:DARK.text,fontSize:12},axisTick:{show:false}},series:[{type:'bar',data:vals,barWidth:14,itemStyle:{color:p=>vals[p.dataIndex]>=0?DARK.up:DARK.down,borderRadius:[0,4,4,0]},label:{show:true,position:p=>vals[p.dataIndex]>=0?'right':'left',formatter:p=>(p.value>0?'+':'')+p.value.toFixed(1)+'亿',color:p=>vals[p.dataIndex]>=0?DARK.up:DARK.down,fontSize:11}}]});
+  window.addEventListener('resize',()=>c.resize());
+}
+window.addEventListener('DOMContentLoaded',()=>setTimeout(initChartIndex,100));
+</script>
+</body>
+</html>
