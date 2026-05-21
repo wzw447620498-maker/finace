@@ -6,7 +6,7 @@
 <title>基金板块日报 · 2026-05-21 · 早盘</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <style>
-  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--up:#3fb950;--down:#f85149;--up-bg:rgba(63,185,80,0.1);--down-bg:rgba(248,81,73,0.1);--accent:#58a6ff;--accent2:#d2a8ff;--yellow:#d29922;--radius:10px;--font-mono:'SF Mono','Fira Code',monospace;}
+  :root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--up:#f85149;--down:#3fb950;--up-bg:rgba(248,81,73,0.1);--down-bg:rgba(63,185,80,0.1);--accent:#58a6ff;--accent2:#d2a8ff;--yellow:#d29922;--radius:10px;--font-mono:'SF Mono','Fira Code',monospace;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:-apple-system,'PingFang SC','Hiragino Sans GB',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
   .header{background:linear-gradient(135deg,#0d1117 0%,#161b22 100%);border-bottom:1px solid var(--border);padding:16px 20px 14px;position:sticky;top:0;z-index:100;}
@@ -432,7 +432,7 @@ function switchTab(el,id){
   if(id==='sectors'&&!window._cs)initChartSectors();
   if(id==='flow'&&!window._cf)initChartFlow2();
 }
-const DARK={bg:'transparent',text:'#8b949e',split:'#21262d',up:'#3fb950',down:'#f85149'};
+const DARK={bg:'transparent',text:'#8b949e',split:'#21262d',up:'#f85149',down:'#3fb950'};
 function ec(id){return echarts.init(document.getElementById(id),null,{renderer:'canvas'});}
 
 function initChartIndex(){
