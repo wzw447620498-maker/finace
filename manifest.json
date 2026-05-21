@@ -1,0 +1,14 @@
+{
+  "reports": [
+    {
+      "date": "2026-05-21",
+      "sessions": [
+        {
+          "type": "午盘",
+          "file": "reports/2026-05-21-午盘.html",
+          "generated": "2026-05-21 12:45"
+        }
+      ]
+    }
+  ]
+}
