@@ -1,6 +1,16 @@
 {
   "reports": [
     {
+      "date": "2026-05-22",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-22-早盘.html",
+          "generated": "13:10"
+        }
+      ]
+    },
+    {
       "date": "2026-05-21",
       "sessions": [
         {
