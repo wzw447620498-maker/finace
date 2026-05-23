@@ -7,6 +7,11 @@
           "type": "早盘",
           "file": "reports/2026-05-22-早盘.html",
           "generated": "13:10"
+        },
+        {
+          "type": "午盘",
+          "file": "reports/2026-05-22-午盘.html",
+          "generated": "18:30"
         }
       ]
     },
