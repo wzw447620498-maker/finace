@@ -1,101 +1,89 @@
-[
-  {
-    "date": "2026-05-26",
-    "sessions": [
-      {
-        "type": "早盘",
-        "file": "reports/2026-05-26-早盘.html",
-        "generated": "13:10"
-      }
-    ]
-  },
-  {
-    "date": "2026-05-25",
-    "sessions": [
-      {
-        "type": "早盘",
-        "file": "reports/2026-05-25-早盘.html",
-        "generated": "13:05"
-      }
-    ]
-  },
-  {
-    "reports": [
-      {
-        "date": "2026-05-24",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2026-05-24-早盘.html",
-            "generated": "2026-05-24 23:05"
-          }
-        ]
-      },
-      {
-        "date": "2026-05-23",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2026-05-23-早盘.html",
-            "generated": "2026-05-23 23:59"
-          }
-        ]
-      },
-      {
-        "date": "2024-01-15",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2024-01-15-早盘.html",
-            "generated": "2024-01-15 08:25"
-          }
-        ]
-      },
-      {
-        "date": "2026-05-22",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2026-05-22-早盘.html",
-            "generated": "13:10"
-          },
-          {
-            "type": "午盘",
-            "file": "reports/2026-05-22-午盘.html",
-            "generated": "18:30"
-          }
-        ]
-      },
-      {
-        "date": "2026-05-21",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2026-05-21-早盘.html",
-            "generated": "2026-05-21 13:10"
-          },
-          {
-            "type": "午盘",
-            "file": "reports/2026-05-21-午盘.html",
-            "generated": "2026-05-21 18:30"
-          }
-        ]
-      },
-      {
-        "date": "2026-05-20",
-        "sessions": [
-          {
-            "type": "早盘",
-            "file": "reports/2026-05-20-早盘.html",
-            "generated": "2026-05-20 13:10"
-          },
-          {
-            "type": "午盘",
-            "file": "reports/2026-05-20-午盘.html",
-            "generated": "2026-05-20 18:30"
-          }
-        ]
-      }
-    ]
-  }
-]
+{
+  "reports": [
+    {
+      "date": "2026-05-26",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-26-早盘.html",
+          "generated": "13:10"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-25-早盘.html",
+          "generated": "13:05"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-24",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-24-早盘.html",
+          "generated": "2026-05-24 23:05"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-23",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-23-早盘.html",
+          "generated": "2026-05-23 23:59"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-22",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-22-早盘.html",
+          "generated": "13:10"
+        },
+        {
+          "type": "午盘",
+          "file": "reports/2026-05-22-午盘.html",
+          "generated": "18:30"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-21",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-21-早盘.html",
+          "generated": "2026-05-21 13:10"
+        },
+        {
+          "type": "午盘",
+          "file": "reports/2026-05-21-午盘.html",
+          "generated": "2026-05-21 18:30"
+        }
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "sessions": [
+        {
+          "type": "早盘",
+          "file": "reports/2026-05-20-早盘.html",
+          "generated": "2026-05-20 13:10"
+        },
+        {
+          "type": "午盘",
+          "file": "reports/2026-05-20-午盘.html",
+          "generated": "2026-05-20 18:30"
+        }
+      ]
+    }
+  ]
+}
