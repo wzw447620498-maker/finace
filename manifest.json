@@ -4,6 +4,11 @@
       "date": "2026-06-05",
       "sessions": [
         {
+          "type": "早盘",
+          "file": "reports/2026-06-05-早盘.html",
+          "generated": "12:32"
+        },
+        {
           "type": "午盘",
           "file": "reports/2026-06-05-午盘.html",
           "generated": "12:27"
